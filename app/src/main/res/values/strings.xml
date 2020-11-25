@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">ISC-581-parcial-2</string>
+    <string name="add_product">Agrega un producto</string>
+    <string name="add_product_action">Agregar producto</string>
+    <string name="create_category">Crear Categoria</string>
+    <string name="save">Salvar</string>
+    <string name="category_placeholder">Categoria</string>
+    <string name="name_placeholder">Nombre</string>
+    <string name="price_placeholder">Precio</string>
+    <string name="add">Agregar</string>
+    <string name="update">Actualizar</string>
+    <string name="remove">Remover</string>
+</resources>
