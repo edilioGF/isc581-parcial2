@@ -21,22 +21,19 @@ public class ListFragment extends Fragment {
     private final int[] txts = new int[]{R.id.product_id, R.id.product_name, R.id.product_price, R.id.product_category};
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (container != null) {
             container.removeAllViews();
         }
-        // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.list_fragment, container, false);
 
+        View v = inflater.inflate(R.layout.list_fragment, container, false);
         lv = (ListView) v.findViewById(R.id.listView);
         lv.setEmptyView(v.findViewById(R.id.txt_no_items));
 
         databaseManager = new DatabaseManager(getContext());
         databaseManager.open();
 
-        adapter = new SimpleCursorAdapter(getContext(),
-                R.layout.list_item, databaseManager.getProducts(), columns, txts, 0);
+        adapter = new SimpleCursorAdapter(getContext(), R.layout.list_item, databaseManager.getProducts(), columns, txts, 0);
         adapter.notifyDataSetChanged();
 
         lv.setAdapter(adapter);
@@ -49,9 +46,7 @@ public class ListFragment extends Fragment {
                 TextView category = (TextView) view.findViewById(R.id.product_category);
                 TextView productId = (TextView) view.findViewById(R.id.product_id);
 
-
                 ProductFragment fragment = new ProductFragment();
-
                 Bundle bundle = new Bundle();
                 bundle.putString("id", productId.getText().toString());
                 bundle.putString("name", name.getText().toString());

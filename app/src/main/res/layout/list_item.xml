@@ -11,18 +11,36 @@
         android:paddingBottom="25dp"
         android:weightSum="3">
 
-        <TextView
-            android:id="@+id/product_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingEnd="8dp"
-            android:textStyle="bold" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/product_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold" />
+            <TextView
+                android:id="@+id/product_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingEnd="8dp"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/name_tag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:text="Nombre: " />
+
+            <TextView
+                android:id="@+id/product_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
@@ -33,10 +51,24 @@
         android:weightSum="3">
 
         <TextView
+            android:id="@+id/price_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:text="precio: " />
+
+        <TextView
             android:id="@+id/product_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/category_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:text="Categoria: " />
 
         <TextView
             android:id="@+id/product_category"

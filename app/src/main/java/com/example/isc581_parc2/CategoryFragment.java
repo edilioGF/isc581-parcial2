@@ -14,9 +14,8 @@ import androidx.fragment.app.Fragment;
 
 public class CategoryFragment extends Fragment {
 
-    private EditText mEditTextCategory;
-    private Button mButtonSave;
-
+    private EditText categoryText;
+    private Button saveButton;
     private DatabaseManager databaseManager;
 
     @Nullable
@@ -27,28 +26,24 @@ public class CategoryFragment extends Fragment {
         }
         View view = inflater.inflate(R.layout.fragment_category, container, false);
 
-        mEditTextCategory = view.findViewById(R.id.input_category);
-        mButtonSave = view.findViewById(R.id.btn_create_category);
+        categoryText = view.findViewById(R.id.input_category);
+        saveButton = view.findViewById(R.id.btn_create_category);
 
-        mButtonSave.setOnClickListener(new View.OnClickListener() {
+        saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String category = mEditTextCategory.getText().toString();
+                String category = categoryText.getText().toString();
 
                 if (category.trim().length() <= 0) {
-                    Toast.makeText(CategoryFragment.this.getContext(),
-                            "Favor introducir una categoria", Toast.LENGTH_SHORT).show();
-
+                    Toast.makeText(CategoryFragment.this.getContext(),"Introduzca una categoria", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 databaseManager = new DatabaseManager(CategoryFragment.this.getContext());
                 databaseManager.createCategory(category);
+                categoryText.setText("");
 
-                mEditTextCategory.setText("");
-
-                Toast.makeText(CategoryFragment.this.getContext(),
-                        "Categoria agregada con exito", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CategoryFragment.this.getContext(),"Categoria agregada", Toast.LENGTH_SHORT).show();
 
                 CategoryFragment.this.getFragmentManager().beginTransaction()
                         .replace(R.id.main_fragment, new ProductFragment(), "MANAGE_PRODUCTS")

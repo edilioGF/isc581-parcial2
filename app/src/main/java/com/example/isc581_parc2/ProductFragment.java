@@ -20,13 +20,15 @@ import java.util.List;
 
 public class ProductFragment extends Fragment {
 
-    private EditText mEditTextName;
-    private EditText mEditTextPrice;
-    private Button mBtnAdd;
-    private Button mBtnSave;
-    private Button mBtnUpdate;
-    private Button mBtnRemove;
-    private Spinner mSpinnerCategory;
+    private EditText editTxtName;
+    private EditText editTxtPrice;
+
+    private Button addBtn;
+    private Button saveBtn;
+    private Button updatedBtn;
+    private Button removeBtn;
+
+    private Spinner categorySpinner;
     private ArrayAdapter<String> mAdapter;
     private List<String> allCategories;
 
@@ -42,15 +44,15 @@ public class ProductFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_product, container, false);
 
         getActivity().setTitle("Agregar Producto");
-        mEditTextName = (EditText) view.findViewById(R.id.input_name);
-        mEditTextPrice = (EditText) view.findViewById(R.id.input_price);
-        mBtnAdd = (Button) view.findViewById(R.id.btn_add);
-        mBtnSave = (Button) view.findViewById(R.id.btn_save);
-        mBtnUpdate = (Button) view.findViewById(R.id.btn_update);
-        mBtnRemove = (Button) view.findViewById(R.id.btn_remove);
+        editTxtName = (EditText) view.findViewById(R.id.input_name);
+        editTxtPrice = (EditText) view.findViewById(R.id.input_price);
+        addBtn = (Button) view.findViewById(R.id.btn_add);
+        saveBtn = (Button) view.findViewById(R.id.btn_save);
+        updatedBtn = (Button) view.findViewById(R.id.btn_update);
+        removeBtn = (Button) view.findViewById(R.id.btn_remove);
 
         //load spinner
-        mSpinnerCategory = (Spinner) view.findViewById(R.id.spinner_category);
+        categorySpinner = (Spinner) view.findViewById(R.id.spinner_category);
         loadSpinnerData();
 
         dbManager = new DatabaseManager(getContext());
@@ -59,24 +61,24 @@ public class ProductFragment extends Fragment {
         if (bundle != null) {
             getActivity().setTitle("Modificar Producto");
 
-            //load data
-            mEditTextName.setText(bundle.getString("name"));
-            mEditTextPrice.setText(bundle.getString("price"));
+            editTxtName.setText(bundle.getString("name"));
+            editTxtPrice.setText(bundle.getString("price"));
             _id = Long.parseLong(bundle.getString("id"));
-            mSpinnerCategory.post(new Runnable() {
+
+            categorySpinner.post(new Runnable() {
                 @Override
                 public void run() {
-                    mSpinnerCategory.setSelection(mAdapter.getPosition((String) bundle.get("category")));
+                    categorySpinner.setSelection(mAdapter.getPosition((String) bundle.get("category")));
                 }
             });
 
             // manage buttons visibility
-            mBtnSave.setVisibility(View.GONE);
-            mBtnUpdate.setVisibility(View.VISIBLE);
-            mBtnRemove.setVisibility(View.VISIBLE);
+            saveBtn.setVisibility(View.GONE);
+            updatedBtn.setVisibility(View.VISIBLE);
+            removeBtn.setVisibility(View.VISIBLE);
         }
 
-        mBtnAdd.setOnClickListener(new View.OnClickListener() {
+        addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ProductFragment.this.getFragmentManager().beginTransaction()
@@ -87,28 +89,30 @@ public class ProductFragment extends Fragment {
             }
         });
 
-        mBtnSave.setOnClickListener(new View.OnClickListener() {
+        saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ProductFragment.this.manageProduct(bundle);
             }
         });
-        mBtnUpdate.setOnClickListener(new View.OnClickListener() {
+
+        updatedBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ProductFragment.this.manageProduct(bundle);
             }
         });
-        mBtnRemove.setOnClickListener(new View.OnClickListener() {
+
+        removeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new AlertDialog.Builder(ProductFragment.this.getContext()).setTitle("Borrar Producto")
-                        .setMessage("Esta seguro que desea remover este producto?")
+                        .setMessage("El producto sera eliminado permanentemente, esta seguro de realizar esta acción?")
                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dbManager.removeProduct(_id);
-                                Toast.makeText(ProductFragment.this.getContext(), "Producto removido con exito", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ProductFragment.this.getContext(), "Producto eliminado exitosamente", Toast.LENGTH_SHORT).show();
 
                                 // go to previous fragment
                                 ProductFragment.this.getFragmentManager().beginTransaction()
@@ -124,11 +128,10 @@ public class ProductFragment extends Fragment {
     }
 
     private void manageProduct(Bundle bundle) {
-        String name = mEditTextName.getText().toString();
-        String price = mEditTextPrice.getText().toString();
-
-        String category = allCategories.size() > 0 ? mSpinnerCategory.getSelectedItem().toString() : "";
-        int count = mSpinnerCategory.getAdapter() != null ? mSpinnerCategory.getAdapter().getCount() : 0;
+        String name = editTxtName.getText().toString();
+        String price = editTxtPrice.getText().toString();
+        String category = allCategories.size() > 0 ? categorySpinner.getSelectedItem().toString() : "";
+        int count = categorySpinner.getAdapter() != null ? categorySpinner.getAdapter().getCount() : 0;
 
         if (name.trim().length() <= 0 || price.trim().length() <= 0 || count == 0) {
             Toast.makeText(getContext(), "Debe llenar todos los campos", Toast.LENGTH_SHORT).show();
@@ -143,23 +146,17 @@ public class ProductFragment extends Fragment {
             dbManager.createProduct(name, price, category);
         }
 
-        Toast.makeText(getContext(), "Producto " + ACTION + " con exito", Toast.LENGTH_SHORT).show();
-
+        Toast.makeText(getContext(), "Producto " + ACTION + " exitosamente", Toast.LENGTH_SHORT).show();
         getFragmentManager().beginTransaction()
                 .replace(R.id.main_fragment, new ProductFragment(), "LIST_PRODUCTS")
                 .addToBackStack("LIST_PRODUCTS").commit();
     }
 
     public void loadSpinnerData() {
-        DatabaseManager dbManager = new DatabaseManager(getContext());
-
+        DatabaseManager dbManager = new DatabaseManager( getContext() );
         allCategories = dbManager.getCategories();
-
-        mAdapter = new ArrayAdapter<>(
-                getContext(), android.R.layout.simple_spinner_item, allCategories);
-
+        mAdapter = new ArrayAdapter<>( getContext(), android.R.layout.simple_spinner_item, allCategories );
         mAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-
-        mSpinnerCategory.setAdapter(mAdapter);
+        categorySpinner.setAdapter(mAdapter);
     }
 }

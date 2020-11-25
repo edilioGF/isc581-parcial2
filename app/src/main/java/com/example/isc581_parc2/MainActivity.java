@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.main_fragment, new ProductFragment()).commit();
-
         }
     }
 }
